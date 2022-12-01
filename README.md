@@ -1,2 +1,2 @@
-# FullStackOpen-
+# FullStackOpen
 FullStackOpen Project Task 
