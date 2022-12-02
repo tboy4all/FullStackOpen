@@ -69,10 +69,11 @@ const App = () => {
 
   return (
     <>
-      <h1>
-        <Header course={course.name} />
-      </h1>
-      <p>
+      <div>
+        <h1>
+          <Header course={course.name} />
+        </h1>
+
         <Content
           name={course.parts[0].name}
           exercises={course.parts[0].exercises}
@@ -87,16 +88,17 @@ const App = () => {
         />
         {/* <Content name={parts[1].name} exercises={parts[1].exercises} />
         <Content name={parts[2].name} exercises={parts[2].exercises} /> */}
-      </p>
-      {/* <p>
+
+        {/* <p>
         <Content part={part2} exercises={exercises2} />
       </p>
       <p>
         <Content part={part3} exercises={exercises3} />
       </p> */}
-      <p>
-        Number of exercises <Total total={total} />
-      </p>
+        <p>
+          Number of exercises <Total total={total} />
+        </p>
+      </div>
     </>
   )
 }

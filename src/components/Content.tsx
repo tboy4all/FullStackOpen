@@ -7,14 +7,16 @@ import React from 'react'
 
 const Content = ({ name, exercises }: any) => {
   return (
-    <div>
-      {name} {exercises}
+    <>
+      <div>
+        {name} {exercises}
+      </div>
       {/* {parts.map((el: any) => (
         <div>
           <span>{el.name}</span>
         </div>
       ))} */}
-    </div>
+    </>
   )
 }
 
