@@ -4,7 +4,7 @@ import Statistics from './components/Statistics'
 // import Button from './components/Button'
 // import History from './components/History'
 
-const App = () => {
+const PartOne = () => {
   // const [left, setLeft] = useState(0)
   // const [right, setRight] = useState(0)
 
@@ -93,4 +93,4 @@ const App = () => {
   )
 }
 
-export default App
+export default PartOne

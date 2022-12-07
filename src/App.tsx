@@ -1,65 +1,89 @@
 import React, { useState } from 'react'
+import Filter from './Exercise 2/phonebook/Filter'
+import Person from './Exercise 2/phonebook/Person'
+import PersonForm from './Exercise 2/phonebook/PersonForm'
+// import PartTwo from './Exercise 2/courseInfo/PartTwo'
 
 const App = () => {
-  const anecdotes = [
-    'If it hurts, do it more often.',
-    'Adding manpower to a late software project makes it later!',
-    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-    'Premature optimization is the root of all evil.',
-    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
-  ]
+  // const [persons, setPersons] = useState([
+  //   { name: 'Arto Hellas', number: '040-123456', id: 1 },
+  //   { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+  //   { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+  //   { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
+  // ])
 
-  const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState(
-    new Array(7 + 1).join('0').split('').map(parseFloat)
-  )
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
+  const [personsToShow, setPersonsToShow] = useState(persons)
 
-  const getRandomQuote = () => {
-    setSelected(Math.floor(Math.random() * 6))
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(e.target.value)
+    setNewName(e.target.value)
   }
 
-  const addVote = () => {
-    setVotes((prevState) => {
-      const newVotes = [...prevState]
-      newVotes[selected] += 1
-      return [...newVotes]
-    })
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewNumber(e.target.value)
   }
 
-  const highestVote = () => {
-    return votes.reduce((cur, prev) => {
-      if (cur >= prev) {
-        return cur
-      } else {
-        return prev
-      }
-    }, 0)
+  const addPerson = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const personsArray = persons.map((e: any) => e.name)
+    // const personsArray = persons.filter((person) => person.name === newName)
+    const personObject = {
+      ...persons,
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1,
+    }
+
+    if (personsArray.includes(`${personObject.name}`)) {
+      // const currName = persons.filter((person: any) => person.name === name)
+      window.confirm(`${newName} is already added to phonebook.`)
+      return
+    }
+
+    setPersons(persons.concat(personObject))
+    setPersonsToShow(persons.concat(personObject))
+
+    setNewName('')
+    setNewNumber('')
+  }
+
+  const addPersonData = {
+    name: newName,
+    newNumber,
+    handleNameChange,
+    handleNumberChange,
+  }
+
+  const filterByName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const search = e.target.value
+    setFilter(search)
+    setPersonsToShow(
+      persons.filter(
+        (person: any) =>
+          person.name.toLowerCase().includes(search.toLocaleLowerCase())
+        // person.newName.toLowerCase().indexOf(e.target.value.toLowerCase()) !==-1
+      )
+    )
   }
 
   return (
-    <>
-      <h2>Anecdote of the Day</h2>
-      {anecdotes[selected]}
-      <div>
-        <strong>has {votes[selected]} votes : </strong>
-      </div>
-      <br />
-      <div>
-        <button onClick={getRandomQuote}>next anecdote</button> &nbsp;
-        <button onClick={addVote}>Vote</button>
-      </div>
-      {votes.reduce((prev, cur) => prev + cur, 0) === 0 ? (
-        ''
+    // <PartTwo />
+    <div>
+      <h2>Phonebook</h2>
+      <Filter filter={filter} filterByName={filterByName} />
+      <h3>Add a new</h3>
+      <PersonForm addPerson={addPerson} data={addPersonData} />
+      <h3>Numbers</h3>
+      {filter === '' ? (
+        <Person persons={persons} />
       ) : (
-        <div>
-          <h2>Anecdote with most votes</h2>{' '}
-          {anecdotes[votes.indexOf(highestVote())]} <br />
-          <strong>has {highestVote()} votes</strong>
-        </div>
+        <Person persons={personsToShow} />
       )}
-    </>
+    </div>
   )
 }
 
