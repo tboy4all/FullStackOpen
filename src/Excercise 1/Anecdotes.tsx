@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from './components/Button'
 
 const Anecdotes = () => {
   const anecdotes = [
@@ -9,15 +10,18 @@ const Anecdotes = () => {
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'Taiye is good',
+    'Believe in yourself',
   ]
 
   const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState(
-    new Array(7 + 1).join('0').split('').map(parseFloat)
-  )
+  // const [votes, setVotes] = useState(
+  //   new Array(7 + 1).join('0').split('').map(parseFloat)
+  // )
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
   const getRandomQuote = () => {
-    setSelected(Math.floor(Math.random() * 6))
+    setSelected(Math.floor(Math.random() * anecdotes.length))
   }
 
   const addVote = () => {
@@ -28,15 +32,18 @@ const Anecdotes = () => {
     })
   }
 
-  const highestVote = () => {
-    return votes.reduce((cur, prev) => {
-      if (cur >= prev) {
-        return cur
-      } else {
-        return prev
-      }
-    }, 0)
-  }
+  // const highestVote = () => {
+  //   return votes.reduce((cur, prev) => {
+  //     if (cur >= prev) {
+  //       return cur
+  //     } else {
+  //       return prev
+  //     }
+  //   }, 0)
+  // }
+
+  const highestVote = votes.indexOf(Math.max(...votes))
+  // console.log(anecdotes[highestVote])
 
   return (
     <>
@@ -47,10 +54,10 @@ const Anecdotes = () => {
       </div>
       <br />
       <div>
-        <button onClick={getRandomQuote}>next anecdote</button> &nbsp;
-        <button onClick={addVote}>Vote</button>
+        <Button handleClick={getRandomQuote} text='next anecdote' /> &nbsp;
+        <Button handleClick={addVote} text='Vote' />
       </div>
-      {votes.reduce((prev, cur) => prev + cur, 0) === 0 ? (
+      {/* {votes.reduce((prev, cur) => prev + cur, 0) === 0 ? (
         ''
       ) : (
         <div>
@@ -58,7 +65,18 @@ const Anecdotes = () => {
           {anecdotes[votes.indexOf(highestVote())]} <br />
           <strong>has {highestVote()} votes</strong>
         </div>
-      )}
+      )} */}
+      <div>
+        <h2>Anecdote with most votes</h2>
+        {votes[highestVote] === 0 ? (
+          <p>No anecdote has votes today. Be first to vote.</p>
+        ) : (
+          <div>
+            {anecdotes[highestVote]} <br />
+            <strong>has {votes[highestVote]} votes</strong>
+          </div>
+        )}
+      </div>
     </>
   )
 }
